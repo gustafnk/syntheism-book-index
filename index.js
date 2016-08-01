@@ -1,10 +1,17 @@
 const fs = require('fs');
 const cheerio = require('cheerio');
 const mkdirp = require('mkdirp');
+const handlebars = require('handlebars');
 
 mkdirp.sync('public'); // Create output directory
 
 const book = fs.readFileSync('book.html', 'utf8');
+
+const glossary = JSON.parse(fs.readFileSync('glossary.json', 'utf8'));
+
+const index = {};
+glossary.forEach(item => { index[item] = [] })
+
 $ = cheerio.load(book);
 
 const chapters = $('.book').splice(2,14);
@@ -18,10 +25,27 @@ chapters.forEach((chapter, chapterIndex) => {
   paragraphs.forEach((paragraph, paragraphIndex) => {
     const html = $(paragraph).html();
 
-    fs.writeFileSync(`public/${chapterNumber}/${paragraphIndex}.html`, html);
+    const path = `${chapterNumber}/${paragraphIndex}.html`;
 
-    
+    Object.keys(index).forEach(key => {
+      if (html.match(new RegExp(key, 'i'))) {
+        index[key].push(path);
+      }
+    });
+
+    fs.writeFileSync(`public/${path}`, html);
   });
 });
+
+console.log(index)
+
+const templateSource = fs.readFileSync('template.hbs', 'utf8');
+var template = handlebars.compile(templateSource);
+
+var result = template({index: index});
+
+fs.writeFileSync('public/index.html', result);
+
+console.log(result);
 
 // console.log(chapters)
