@@ -37,15 +37,9 @@ chapters.forEach((chapter, chapterIndex) => {
   });
 });
 
-console.log(index)
-
 const templateSource = fs.readFileSync('template.hbs', 'utf8');
 var template = handlebars.compile(templateSource);
 
 var result = template({index: index});
 
 fs.writeFileSync('public/index.html', result);
-
-console.log(result);
-
-// console.log(chapters)
