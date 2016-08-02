@@ -8,15 +8,8 @@
 <body>
   <div class="container-fluid">
     <div class="col-md-9" role="main">
-      <h1>Syntheist Index</h1>
-      {{#each index}}
-          <h2>{{@key}}</h2>
-          <div>
-          {{#each this}}
-            <a href="{{ this }}">{{ this }}</a>
-          {{/each}}
-          </div>
-      {{/each}}
+      <h1>{{ chapterNumber }}:{{ paragraphNumber }}</h1>
+      {{{ paragraphText }}}
     </div>
   </div>
 </body>

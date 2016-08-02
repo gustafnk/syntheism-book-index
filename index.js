@@ -16,24 +16,34 @@ $ = cheerio.load(book);
 
 const chapters = $('.book').splice(2,14);
 
+var paragraphTemplate = handlebars.compile(fs.readFileSync('paragraph-template.hbs', 'utf8'));
+
 chapters.forEach((chapter, chapterIndex) => {
+  const chapterNumber = chapterIndex + 1;
+
   const paragraphs = $(chapter).find('.noindent').toArray();
 
-  const chapterNumber = chapterIndex + 1;
   mkdirp.sync(`public/${chapterNumber}`);
 
   paragraphs.forEach((paragraph, paragraphIndex) => {
-    const html = $(paragraph).html();
+    const paragraphNumber = paragraphIndex + 1;
+    const paragraphText = $(paragraph).html();
 
-    const path = `${chapterNumber}/${paragraphIndex}.html`;
+    const path = `${chapterNumber}/${paragraphNumber}.html`;
 
     Object.keys(index).forEach(key => {
-      if (html.match(new RegExp(key, 'i'))) {
+      if (paragraphText.match(new RegExp(key, 'i'))) {
         index[key].push(path);
       }
     });
 
-    fs.writeFileSync(`public/${path}`, html);
+    const paragraphViewModel = {
+      paragraphText,
+      chapterNumber,
+      paragraphNumber,
+    }
+
+    fs.writeFileSync(`public/${path}`, paragraphTemplate(paragraphViewModel));
   });
 });
 
