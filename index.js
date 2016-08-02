@@ -16,6 +16,7 @@ $ = cheerio.load(book);
 
 const chapters = $('.book').splice(2,14);
 
+var chapterTemplate = handlebars.compile(fs.readFileSync('chapter-template.hbs', 'utf8'));
 var paragraphTemplate = handlebars.compile(fs.readFileSync('paragraph-template.hbs', 'utf8'));
 
 chapters.forEach((chapter, chapterIndex) => {
@@ -25,7 +26,7 @@ chapters.forEach((chapter, chapterIndex) => {
 
   mkdirp.sync(`public/${chapterNumber}`);
 
-  paragraphs.forEach((paragraph, paragraphIndex) => {
+  const paragraphNumbers = paragraphs.map((paragraph, paragraphIndex) => {
     const paragraphNumber = paragraphIndex + 1;
     const paragraphText = $(paragraph).html();
 
@@ -44,7 +45,17 @@ chapters.forEach((chapter, chapterIndex) => {
     }
 
     fs.writeFileSync(`public/${path}`, paragraphTemplate(paragraphViewModel));
+
+    return paragraphNumber;
   });
+
+  const chapterViewModel = {
+    chapterNumber,
+    paragraphNumbers,
+  }
+
+  fs.writeFileSync(`public/${chapterNumber}/index.html`, chapterTemplate(chapterViewModel));
+
 });
 
 const templateSource = fs.readFileSync('template.hbs', 'utf8');
