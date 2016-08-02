@@ -2,6 +2,7 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const mkdirp = require('mkdirp');
 const handlebars = require('handlebars');
+const getSlug = require('speakingurl');
 
 mkdirp.sync('public'); // Create output directory
 
@@ -10,7 +11,10 @@ const book = fs.readFileSync('book.html', 'utf8');
 const glossary = JSON.parse(fs.readFileSync('glossary.json', 'utf8'));
 
 const index = {};
-glossary.forEach(item => { index[item] = [] })
+glossary.forEach(item => { index[item] = {
+  anchor: getSlug(item),
+  paragraphs: []
+}});
 
 $ = cheerio.load(book);
 
@@ -34,7 +38,7 @@ chapters.forEach((chapter, chapterIndex) => {
 
     Object.keys(index).forEach(key => {
       if (paragraphText.match(new RegExp(key, 'i'))) {
-        index[key].push(path);
+        index[key].paragraphs.push(path);
       }
     });
 

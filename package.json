@@ -12,6 +12,7 @@
     "cheerio": "^0.20.0",
     "handlebars": "^4.0.5",
     "mkdirp": "^0.5.1",
-    "simplehttpserver": "0.0.6"
+    "simplehttpserver": "0.0.6",
+    "speakingurl": "^9.0.0"
   }
 }

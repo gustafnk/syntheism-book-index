@@ -10,9 +10,9 @@
     <div class="col-md-9" role="main">
       <h1>Syntheist Index</h1>
       {{#each index}}
-          <h2>{{@key}}</h2>
+          <h2><a name="{{ this.anchor }}"></a>{{@key}}</h2>
           <div>
-          {{#each this}}
+          {{#each this.paragraphs}}
             <a href="{{ this }}">{{ this }}</a>
           {{/each}}
           </div>
