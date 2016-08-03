@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const cheerio = require('cheerio');
 const mkdirp = require('mkdirp');
@@ -16,7 +18,7 @@ glossary.forEach(item => { index[item] = {
   paragraphs: []
 }});
 
-$ = cheerio.load(book);
+const $ = cheerio.load(book);
 
 const chapters = $('.book').splice(2,14);
 
@@ -30,16 +32,19 @@ chapters.forEach((chapter, chapterIndex) => {
 
   mkdirp.sync(`public/${chapterNumber}`);
 
-  const paragraphNumbers = paragraphs.map((paragraph, paragraphIndex) => {
+  const paragraphResults = paragraphs.map((paragraph, paragraphIndex) => {
     const paragraphNumber = paragraphIndex + 1;
-    const paragraphText = $(paragraph).html();
+    let paragraphText = $(paragraph).html();
 
-    const path = `${chapterNumber}/${paragraphNumber}.html`;
+    const path = `${chapterNumber}/${paragraphNumber}`;
 
     Object.keys(index).forEach(key => {
-      if (paragraphText.match(new RegExp(key, 'i'))) {
+      const regex = new RegExp(`\\b${key}\\b`, 'ig');
+      if (paragraphText.match(regex)) {
         index[key].paragraphs.push(path);
       }
+
+      paragraphText = paragraphText.replace(regex, `<a href="../#${index[key].anchor}">$&</a>`);
     });
 
     const paragraphViewModel = {
@@ -50,12 +55,12 @@ chapters.forEach((chapter, chapterIndex) => {
 
     fs.writeFileSync(`public/${path}`, paragraphTemplate(paragraphViewModel));
 
-    return paragraphNumber;
+    return { paragraphNumber, paragraphText };
   });
 
   const chapterViewModel = {
     chapterNumber,
-    paragraphNumbers,
+    paragraphs: paragraphResults,
   }
 
   fs.writeFileSync(`public/${chapterNumber}/index.html`, chapterTemplate(chapterViewModel));

@@ -3,18 +3,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Syntheism &#8211; Creating God in the Internet Age</title>
-  <script src="https://rawgit.com/gustafnk/h-include/master/h-include.js"></script>
   <link rel="stylesheet" href="http://syntheism.org/wp-content/syntheism_book/styles/bootstrap.css">
 </head>
 <body>
   <div class="container-fluid">
     <div class="col-md-9" role="main">
+      <br>
       <a href="../">Back to index</a>
       <h1>{{ chapterNumber }}</h1>
-      {{#each paragraphNumbers as |paragraphNumber|}}
+      {{#each paragraphs as |paragraph|}}
       <div>
-        <a name="{{ paragraphNumber }}"></a>
-        <h-include src="{{ paragraphNumber }}.html" fragment="article"></h-include>
+        <a name="{{ paragraph.paragraphNumber }}"></a>
+        {{{ paragraph.paragraphText }}}
         <br><br>
       </div>
       {{/each}}
