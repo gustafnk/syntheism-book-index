@@ -67,11 +67,13 @@ chapters.forEach((chapter, chapterIndex) => {
         index[key].paragraphs.push(path);
       }
 
+      const anchor = index[key].anchor;
       paragraphText = paragraphText.replace(index[key].regex,
-        `<a href="../keys/${esc}${index[key].anchor}.html${esc}">${esc}$&${esc}</a>`);
+        `<a href="../keys/${esc}${anchor}.html${esc}">${esc}$&${esc}</a>`);
     });
 
     paragraphText = paragraphText.replace(new RegExp(esc, 'g'), '');
+
     paragraphCache[path] = paragraphText;
 
     const paragraphViewModel = {
@@ -108,8 +110,9 @@ $('.noindent4').each((i, glossaryItem) => {
     _.sortBy(Object.keys(index), item => -item.length).forEach(key => {
       // TODO Build up relationship graph here
 
+      const anchor = index[key].anchor;
       explanation = explanation.replace(index[key].regex,
-        `<a href="./${esc}${index[key].anchor}.html${esc}">${esc}$&${esc}</a>`);
+        `<a href="./${esc}${anchor}.html${esc}">${esc}$&${esc}</a>`);
     });
 
     explanation = explanation.replace(new RegExp(esc, 'g'), '');
