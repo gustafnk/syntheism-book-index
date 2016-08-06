@@ -32,6 +32,8 @@ glossary.forEach(item => {
   }
 });
 
+index['dialectic between eternalism and mobilism'].anchor = 'dialectic-between-eternalist-and-mobilist';
+
 const paragraphCache = {};
 
 const esc = '___'; // We escape matches, to only match and replace once
@@ -73,6 +75,9 @@ chapters.forEach((chapter, chapterIndex) => {
     });
 
     paragraphText = paragraphText.replace(new RegExp(esc, 'g'), '');
+
+    // Fix for dialectical buc
+    paragraphText = paragraphText.replace(new RegExp(`between <a href="../keys/eternalism.html">eternalism</a>`, 'ig'), 'between eternalism');
 
     paragraphCache[path] = paragraphText;
 
@@ -117,6 +122,9 @@ $('.noindent4').each((i, glossaryItem) => {
 
     explanation = explanation.replace(new RegExp(esc, 'g'), '');
     explanation = capitalizeFirstLetter(explanation);
+
+    // Fix for dialectical buc
+    explanation = explanation.replace(new RegExp(`between <a href="./eternalism.html">eternalism</a>`, 'ig'), 'between eternalism');
 
     index[key].explanation = `${explanation}<br><br>`;
   }
