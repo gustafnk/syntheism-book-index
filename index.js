@@ -14,10 +14,15 @@ const book = fs.readFileSync('book.html', 'utf8');
 const glossary = JSON.parse(fs.readFileSync('glossary.json', 'utf8'));
 
 const index = {};
-glossary.forEach(item => { index[item] = {
-  anchor: getSlug(item),
-  paragraphs: []
-}});
+glossary.forEach(item => {
+  const regex = new RegExp(`\\b${item.regex || item.key}\\b`, 'ig');
+
+  index[item.key] = {
+    anchor: getSlug(item.key),
+    regex,
+    paragraphs: []
+  }
+});
 
 const esc = '___'; // We escape matches, to only match and replace once
 
@@ -42,12 +47,11 @@ chapters.forEach((chapter, chapterIndex) => {
     const path = `${chapterNumber}/${paragraphNumber}`;
 
     _.sortBy(Object.keys(index), item => -item.length).forEach(key => {
-      const regex = new RegExp(`\\b${key}\\b`, 'ig');
-      if (paragraphText.match(regex)) {
+      if (paragraphText.match(index[key].regex)) {
         index[key].paragraphs.push(path);
       }
 
-      paragraphText = paragraphText.replace(regex,
+      paragraphText = paragraphText.replace(index[key].regex,
         `<a href="../index.html#${esc}${index[key].anchor}${esc}">${esc}$&${esc}</a>`);
     });
 
