@@ -6,6 +6,7 @@ const mkdirp = require('mkdirp');
 const handlebars = require('handlebars');
 const getSlug = require('speakingurl');
 const _ = require('lodash');
+const moment = require('moment');
 
 mkdirp.sync('public'); // Create output directory
 
@@ -29,6 +30,11 @@ glossary.forEach(item => {
 const paragraphCache = {};
 
 const esc = '___'; // We escape matches, to only match and replace once
+const lastModified = moment().format(`D. MMMM YYYY [at] HH:mm:ss`);
+
+handlebars.registerHelper('lastModified', () => {
+  return lastModified;
+});
 
 const $ = cheerio.load(book);
 
