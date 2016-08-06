@@ -11,7 +11,7 @@
   { "key": "attention" },
   { "key": "attentionalism" },
   { "key": "Badiou" },
-  { "key": "Barad" },
+  { "key": "Barad, Karen", "regex": "Barad|Karen Barad" },
   { "key": "The Body Machines" },
   { "key": "capitalism" },
   { "key": "chemical liberation" },
