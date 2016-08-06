@@ -8,6 +8,11 @@ const getSlug = require('speakingurl');
 const _ = require('lodash');
 const moment = require('moment');
 
+// From http://stackoverflow.com/a/1026087
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 mkdirp.sync('public'); // Create output directory
 
 const book = fs.readFileSync('book.html', 'utf8');
@@ -21,7 +26,7 @@ glossary.forEach(item => {
 
   index[item.key] = {
     anchor: getSlug(item.key),
-    title: item.key, // TODO
+    title: capitalizeFirstLetter(item.key),
     regex,
     paragraphs: []
   }
@@ -90,8 +95,33 @@ chapters.forEach((chapter, chapterIndex) => {
   fs.writeFileSync(`public/${chapterNumber}/index.html`, chapterTemplate(chapterViewModel));
 });
 
+// Extract glossary definitions
+$('.noindent4').each((i, glossaryItem) => {
+  const $glossaryItem = $(glossaryItem);
+  const key = $glossaryItem.find('b').text();
+
+  $glossaryItem.children().remove('b').remove('a');
+
+  if (index[key]) {
+    let explanation = $glossaryItem.html().trim();
+
+    _.sortBy(Object.keys(index), item => -item.length).forEach(key => {
+      // TODO Build up relationship graph here
+
+      explanation = explanation.replace(index[key].regex,
+        `<a href="../index.html#${esc}${index[key].anchor}${esc}">${esc}$&${esc}</a>`);
+    });
+
+    explanation = explanation.replace(new RegExp(esc, 'g'), '');
+    explanation = capitalizeFirstLetter(explanation);
+
+    index[key].explanation = `${explanation}<br><br>`;
+  }
+});
+
 // Create key pages
 mkdirp.sync('public/keys');
+
 Object.keys(index).forEach(key => {
 
   const paragraphs = index[key].paragraphs;

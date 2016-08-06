@@ -11,6 +11,7 @@
       <br>
       <a href="../index.html">Back to index</a>
       <h1>{{ key.title }}</h1>
+      {{{ key.explanation }}}
       {{#each key.paragraphsWithContent as |paragraph|}}
           <div>
             <a href="../{{ paragraph.chapter }}/index.html#{{ paragraph.paragraph }}">{{ paragraph.chapter }}:{{ paragraph.paragraph }}</a>
