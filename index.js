@@ -44,7 +44,7 @@ chapters.forEach((chapter, chapterIndex) => {
         index[key].paragraphs.push(path);
       }
 
-      paragraphText = paragraphText.replace(regex, `<a href="../#${index[key].anchor}">$&</a>`);
+      paragraphText = paragraphText.replace(regex, `<a href="../index.html#${index[key].anchor}">$&</a>`);
     });
 
     const paragraphViewModel = {
@@ -53,7 +53,7 @@ chapters.forEach((chapter, chapterIndex) => {
       paragraphNumber,
     }
 
-    fs.writeFileSync(`public/${path}`, paragraphTemplate(paragraphViewModel));
+    fs.writeFileSync(`public/${path}.html`, paragraphTemplate(paragraphViewModel));
 
     return { paragraphNumber, paragraphText };
   });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js && simplehttpserver -p 8080 public/"
+    "start": "node index.js && cp bootstrap.css public/bootstrap.css"
   },
   "author": "Gustaf Nilsson Kotte <gustaf.nk@gmail.com> (https://twitter.com/gustaf_nk)",
   "license": "ISC",
@@ -12,7 +12,6 @@
     "cheerio": "^0.20.0",
     "handlebars": "^4.0.5",
     "mkdirp": "^0.5.1",
-    "simplehttpserver": "0.0.6",
     "speakingurl": "^9.0.0"
   }
 }
