@@ -68,7 +68,7 @@ chapters.forEach((chapter, chapterIndex) => {
       }
 
       paragraphText = paragraphText.replace(index[key].regex,
-        `<a href="../index.html#${esc}${index[key].anchor}${esc}">${esc}$&${esc}</a>`);
+        `<a href="../keys/${esc}${index[key].anchor}.html${esc}">${esc}$&${esc}</a>`);
     });
 
     paragraphText = paragraphText.replace(new RegExp(esc, 'g'), '');
@@ -109,7 +109,7 @@ $('.noindent4').each((i, glossaryItem) => {
       // TODO Build up relationship graph here
 
       explanation = explanation.replace(index[key].regex,
-        `<a href="../index.html#${esc}${index[key].anchor}${esc}">${esc}$&${esc}</a>`);
+        `<a href="./${esc}${index[key].anchor}.html${esc}">${esc}$&${esc}</a>`);
     });
 
     explanation = explanation.replace(new RegExp(esc, 'g'), '');
