@@ -43,7 +43,7 @@
   { "key": "The Futurica Trilogy" },
   { "key": "The Global Empire" },
   { "key": "God" },
-  { "key": "Hegel, Georg Wilhelm Friedrich", "regex": "Hegel|Georg Wilhelm Friedrich Hegel" },
+  { "key": "Hegel, Georg Wilhelm Friedrich", "regex": "Hegel|Georg Wilhelm Friedrich Hegel|G W F Hegel" },
   { "key": "Heidegger, Martin", "regex": "Heidegger|Martin Heidegger" },
   { "key": "Heraclitus" },
   { "key": "humanism" },
