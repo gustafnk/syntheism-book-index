@@ -19,10 +19,13 @@ glossary.forEach(item => {
 
   index[item.key] = {
     anchor: getSlug(item.key),
+    title: item.key, // TODO
     regex,
     paragraphs: []
   }
 });
+
+const paragraphCache = {};
 
 const esc = '___'; // We escape matches, to only match and replace once
 
@@ -56,6 +59,7 @@ chapters.forEach((chapter, chapterIndex) => {
     });
 
     paragraphText = paragraphText.replace(new RegExp(esc, 'g'), '');
+    paragraphCache[path] = paragraphText;
 
     const paragraphViewModel = {
       paragraphText,
@@ -74,12 +78,35 @@ chapters.forEach((chapter, chapterIndex) => {
   }
 
   fs.writeFileSync(`public/${chapterNumber}/index.html`, chapterTemplate(chapterViewModel));
-
 });
 
+// Create key pages
+mkdirp.sync('public/keys');
+Object.keys(index).forEach(key => {
+
+  const paragraphs = index[key].paragraphs;
+  const paragraphsWithContent = paragraphs.map(paragraph => {
+
+    const content = paragraphCache[paragraph];
+    return {
+      chapter: paragraph.split('/')[0],
+      paragraph: paragraph.split('/')[1],
+      content
+    };
+  });
+
+  index[key].paragraphsWithContent = paragraphsWithContent;
+
+  const templateSource = fs.readFileSync('key-template.hbs', 'utf8');
+  const template = handlebars.compile(templateSource);
+
+  const result = template({key: index[key]});
+  fs.writeFileSync(`public/keys/${index[key].anchor}.html`, result)
+});
+
+// Create index.html
 const templateSource = fs.readFileSync('template.hbs', 'utf8');
-var template = handlebars.compile(templateSource);
+const template = handlebars.compile(templateSource);
 
-var result = template({index: index});
-
+const result = template({index: index});
 fs.writeFileSync('public/index.html', result);

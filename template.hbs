@@ -10,7 +10,7 @@
     <div class="col-md-9" role="main">
       <h1>Syntheism Index</h1>
       {{#each index}}
-          <h2><a name="{{ this.anchor }}"></a>{{@key}}</h2>
+          <h2><a href="keys/{{ this.anchor}}.html" name="{{ this.anchor }}">{{@key}}</a></h2>
           <div>
           {{#each this.paragraphs}}
             <a href="{{ this }}.html">{{ this }}</a>
