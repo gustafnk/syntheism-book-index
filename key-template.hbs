@@ -14,6 +14,7 @@
       {{#each key.paragraphsWithContent as |paragraph|}}
           <div>
             <a href="../{{ paragraph.chapter }}/index.html#{{ paragraph.paragraph }}">{{ paragraph.chapter }}:{{ paragraph.paragraph }}</a>
+            (In »<a href="../{{ paragraph.chapter }}/index.html">{{ chapterName}}</a>«)
           </div>
           <div>
             {{{ paragraph.content }}}

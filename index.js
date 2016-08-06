@@ -12,6 +12,7 @@ mkdirp.sync('public'); // Create output directory
 const book = fs.readFileSync('book.html', 'utf8');
 
 const glossary = JSON.parse(fs.readFileSync('glossary.json', 'utf8'));
+const chapterNames = JSON.parse(fs.readFileSync('chapter-names.json', 'utf8'));
 
 const index = {};
 glossary.forEach(item => {
@@ -38,6 +39,7 @@ var paragraphTemplate = handlebars.compile(fs.readFileSync('paragraph-template.h
 
 chapters.forEach((chapter, chapterIndex) => {
   const chapterNumber = chapterIndex + 1;
+  const chapterName = chapterNames[chapterNumber];
 
   const paragraphs = $(chapter).find('.noindent').toArray();
 
@@ -65,6 +67,7 @@ chapters.forEach((chapter, chapterIndex) => {
       paragraphText,
       chapterNumber,
       paragraphNumber,
+      chapterName,
     }
 
     fs.writeFileSync(`public/${path}.html`, paragraphTemplate(paragraphViewModel));
@@ -74,6 +77,7 @@ chapters.forEach((chapter, chapterIndex) => {
 
   const chapterViewModel = {
     chapterNumber,
+    chapterName,
     paragraphs: paragraphResults,
   }
 
@@ -88,9 +92,11 @@ Object.keys(index).forEach(key => {
   const paragraphsWithContent = paragraphs.map(paragraph => {
 
     const content = paragraphCache[paragraph];
+    const paragraphTokens = paragraph.split('/');
     return {
-      chapter: paragraph.split('/')[0],
-      paragraph: paragraph.split('/')[1],
+      chapter: paragraphTokens[0],
+      chapterName: chapterNames[paragraphTokens[0]],
+      paragraph: paragraphTokens[1],
       content
     };
   });
