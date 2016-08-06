@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 const mkdirp = require('mkdirp');
 const handlebars = require('handlebars');
 const getSlug = require('speakingurl');
+const _ = require('lodash');
 
 mkdirp.sync('public'); // Create output directory
 
@@ -17,6 +18,8 @@ glossary.forEach(item => { index[item] = {
   anchor: getSlug(item),
   paragraphs: []
 }});
+
+const esc = '___'; // We escape matches, to only match and replace once
 
 const $ = cheerio.load(book);
 
@@ -38,14 +41,17 @@ chapters.forEach((chapter, chapterIndex) => {
 
     const path = `${chapterNumber}/${paragraphNumber}`;
 
-    Object.keys(index).forEach(key => {
+    _.sortBy(Object.keys(index), item => -item.length).forEach(key => {
       const regex = new RegExp(`\\b${key}\\b`, 'ig');
       if (paragraphText.match(regex)) {
         index[key].paragraphs.push(path);
       }
 
-      paragraphText = paragraphText.replace(regex, `<a href="../index.html#${index[key].anchor}">$&</a>`);
+      paragraphText = paragraphText.replace(regex,
+        `<a href="../index.html#${esc}${index[key].anchor}${esc}">${esc}$&${esc}</a>`);
     });
+
+    paragraphText = paragraphText.replace(new RegExp(esc, 'g'), '');
 
     const paragraphViewModel = {
       paragraphText,
