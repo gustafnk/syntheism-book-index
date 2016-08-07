@@ -3,7 +3,7 @@
 ## Preparation
 
 - Download http://syntheism.org/wp-content/syntheism_book/Syntheism.html and save it as `book.html`
-- Now, need to make some minor changes in order to parse the book more easily
+- Now, you need to make some minor changes in order to parse the book more easily
 - Create a temporary branch and copy the book file: `git checkout -b tmp; cp book.html tmp.html; git add -A; git commit -m "Tmp"`
 - Apply the patch: `git apply 0001-Book-fixes.patch`
 - Inspect the necessary changes with `git diff --color-words=.`
